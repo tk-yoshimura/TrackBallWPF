@@ -53,6 +53,7 @@ namespace TrackBallGUI {
             double y = ((height * 0.5) - point.Y) / radius;
 
             double norm_squa = (x * x) + (y * y);
+
             if (norm_squa > 1.0) {
                 double inv_length = 1.0 / double.Sqrt(norm_squa);
                 return new Vector3D(x * inv_length, y * inv_length, 0);

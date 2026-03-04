@@ -121,6 +121,7 @@ namespace TrackBallGUI {
 
         private void UpdateViewportSize() {
             double size = double.Min(ActualWidth, ActualHeight);
+
             if (size <= 0) {
                 return;
             }
@@ -133,15 +134,16 @@ namespace TrackBallGUI {
             Quaternion q = Rotation;
             double norm = double.Sqrt((q.X * q.X) + (q.Y * q.Y) + (q.Z * q.Z));
 
-            if (norm < 1e-12) {
-                axis_rotation.Axis = new Vector3D(0, 1, 0);
-                axis_rotation.Angle = 0;
+            if (norm >= 1e-12) {
+                Vector3D axis = new(q.X / norm, q.Y / norm, q.Z / norm);
+                axis_rotation.Axis = axis;
+                axis_rotation.Angle = double.Atan2Pi(norm, q.W) * 360.0;
+
                 return;
             }
 
-            Vector3D axis = new(q.X / norm, q.Y / norm, q.Z / norm);
-            axis_rotation.Axis = axis;
-            axis_rotation.Angle = double.Atan2Pi(norm, q.W) * 360.0;
+            axis_rotation.Axis = new Vector3D(0, 1, 0);
+            axis_rotation.Angle = 0;
         }
     }
 }
