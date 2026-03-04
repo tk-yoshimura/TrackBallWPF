@@ -1,4 +1,5 @@
-﻿using TrackBallGUI;
+
+using TrackBallGUI;
 
 namespace QuaternionTests {
     [TestClass]
@@ -26,6 +27,15 @@ namespace QuaternionTests {
         }
 
         [TestMethod]
+        public void UnaryMinusTest() {
+            Quaternion q = new(1, -2, 3, -4);
+
+            Quaternion result = -q;
+
+            AssertQuaternion(-1, 2, -3, 4, result);
+        }
+
+        [TestMethod]
         public void MulTest() {
             Quaternion q1 = new(1, 2, 3, 4);
             Quaternion q2 = new(5, 6, 7, 8);
@@ -43,6 +53,95 @@ namespace QuaternionTests {
             Quaternion result = (q1 / q2) * q2;
 
             AssertQuaternion(q1.W, q1.X, q1.Y, q1.Z, result);
+        }
+
+        [TestMethod]
+        public void ConjugateTest() {
+            Quaternion q = new(1, 2, -3, 4);
+
+            Quaternion result = q.Conjugate();
+
+            AssertQuaternion(1, -2, 3, -4, result);
+        }
+
+        [TestMethod]
+        public void InverseTest() {
+            Quaternion q = new(1, 2, 3, 4);
+
+            Quaternion result = q * q.Inverse();
+
+            AssertQuaternion(1, 0, 0, 0, result);
+        }
+
+        [TestMethod]
+        public void InverseZeroReturnsNaNTest() {
+            Quaternion result = new Quaternion(0, 0, 0, 0).Inverse();
+
+            Assert.IsTrue(double.IsNaN(result.W));
+            Assert.AreEqual(0.0, result.X, tolerance);
+            Assert.AreEqual(0.0, result.Y, tolerance);
+            Assert.AreEqual(0.0, result.Z, tolerance);
+        }
+
+        [TestMethod]
+        public void NormalizeZeroReturnsIdentityTest() {
+            Quaternion result = Quaternion.Normalize(new Quaternion(0, 0, 0, 0));
+
+            AssertQuaternion(1, 0, 0, 0, result);
+        }
+
+        [TestMethod]
+        public void NormalizeNaNReturnsIdentityTest() {
+            Quaternion result = Quaternion.Normalize(Quaternion.NaN);
+
+            AssertQuaternion(1, 0, 0, 0, result);
+        }
+
+        [TestMethod]
+        public void NormalizeUnitQuaternionReturnsSameValueTest() {
+            Quaternion unit = new(1, 0, 0, 0);
+
+            Quaternion result = Quaternion.Normalize(unit);
+
+            AssertQuaternion(unit.W, unit.X, unit.Y, unit.Z, result);
+        }
+
+        [TestMethod]
+        public void FromVectorsSameDirectionReturnsIdentityTest() {
+            System.Windows.Media.Media3D.Vector3D from = new(1, 0, 0);
+            System.Windows.Media.Media3D.Vector3D to = new(2, 0, 0);
+
+            Quaternion result = Quaternion.FromVectors(from, to);
+
+            AssertQuaternion(1, 0, 0, 0, result);
+        }
+
+        [TestMethod]
+        public void FromVectorsOppositeDirectionReturnsHalfTurnQuaternionTest() {
+            System.Windows.Media.Media3D.Vector3D from = new(1, 0, 0);
+            System.Windows.Media.Media3D.Vector3D to = new(-1, 0, 0);
+
+            Quaternion result = Quaternion.FromVectors(from, to);
+
+            Assert.AreEqual(0.0, result.W, tolerance);
+            Assert.AreEqual(0.0, result.X, tolerance);
+            Assert.AreEqual(0.0, result.Y, tolerance);
+            Assert.AreEqual(-1.0, result.Z, tolerance);
+        }
+
+        [TestMethod]
+        public void EqualsAndOperatorTest() {
+            Quaternion a = new(1, 2, 3, 4);
+            Quaternion b = new(1, 2, 3, 4);
+            Quaternion c = new(1, 2, 3, 5);
+
+            Assert.IsTrue(a == b);
+            Assert.IsFalse(a != b);
+            Assert.IsTrue(a.Equals(b));
+            Assert.IsTrue(a.Equals((object)b));
+            Assert.IsFalse(a == c);
+            Assert.IsTrue(a != c);
+            Assert.IsFalse(a.Equals(c));
         }
 
         private static void AssertQuaternion(double expectedW, double expectedX, double expectedY, double expectedZ, Quaternion actual) {
