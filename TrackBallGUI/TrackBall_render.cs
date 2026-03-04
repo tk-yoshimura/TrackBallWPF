@@ -7,7 +7,7 @@ using System.Windows.Media.Media3D;
 
 namespace TrackBallGUI {
     public partial class TrackBall {
-        private readonly AxisAngleRotation3D rotation_rotation = new(new Vector3D(0, 1, 0), 0);
+        private readonly AxisAngleRotation3D axis_rotation = new(new Vector3D(0, 1, 0), 0);
 
         private const int theta_steps = 18;
         private const int phi_steps = 18;
@@ -17,7 +17,7 @@ namespace TrackBallGUI {
             model_root.Children.Add(new AmbientLight(Colors.White));
 
             Model3DGroup group = BuildOctantSphere();
-            group.Transform = new RotateTransform3D(rotation_rotation);
+            group.Transform = new RotateTransform3D(axis_rotation);
             model_root.Children.Add(group);
 
             Viewport.Children.Clear();
@@ -131,14 +131,14 @@ namespace TrackBallGUI {
             double norm = double.Sqrt((q.X * q.X) + (q.Y * q.Y) + (q.Z * q.Z));
 
             if (norm < 1e-12) {
-                rotation_rotation.Axis = new Vector3D(0, 1, 0);
-                rotation_rotation.Angle = 0;
+                axis_rotation.Axis = new Vector3D(0, 1, 0);
+                axis_rotation.Angle = 0;
                 return;
             }
 
             Vector3D axis = new(q.X / norm, q.Y / norm, q.Z / norm);
-            rotation_rotation.Axis = axis;
-            rotation_rotation.Angle = double.Atan2Pi(norm, q.W) * 360.0;
+            axis_rotation.Axis = axis;
+            axis_rotation.Angle = double.Atan2Pi(norm, q.W) * 360.0;
         }
     }
 }
