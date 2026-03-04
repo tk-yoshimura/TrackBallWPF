@@ -34,17 +34,17 @@ namespace TrackBallGUI {
         private static Model3DGroup BuildOctantSphere() {
             Model3DGroup group = new();
 
-            AddHemisphereOctants(group, y_positive: true, theta_start: 0.0, theta_end: double.Pi / 2.0);
-            AddHemisphereOctants(group, y_positive: false, theta_start: double.Pi / 2.0, theta_end: double.Pi);
+            AddOctant(group, +1, +1, +1, 0.0, 0.5, 0.0, 0.5);
+            AddOctant(group, -1, +1, +1, 0.0, 0.5, 0.5, 1.0);
+            AddOctant(group, -1, +1, -1, 0.0, 0.5, 1.0, 1.5);
+            AddOctant(group, +1, +1, -1, 0.0, 0.5, 1.5, 2.0);
+
+            AddOctant(group, +1, -1, +1, 0.5, 1.0, 0.0, 0.5);
+            AddOctant(group, -1, -1, +1, 0.5, 1.0, 0.5, 1.0);
+            AddOctant(group, -1, -1, -1, 0.5, 1.0, 1.0, 1.5);
+            AddOctant(group, +1, -1, -1, 0.5, 1.0, 1.5, 2.0);
 
             return group;
-        }
-
-        private static void AddHemisphereOctants(Model3DGroup group, bool y_positive, double theta_start, double theta_end) {
-            AddOctant(group, 1, y_positive ? 1 : -1, 1, theta_start, theta_end, 0.0, double.Pi / 2.0);
-            AddOctant(group, -1, y_positive ? 1 : -1, 1, theta_start, theta_end, double.Pi / 2.0, double.Pi);
-            AddOctant(group, -1, y_positive ? 1 : -1, -1, theta_start, theta_end, double.Pi, double.Pi * 1.5);
-            AddOctant(group, 1, y_positive ? 1 : -1, -1, theta_start, theta_end, double.Pi * 1.5, double.Pi * 2.0);
         }
 
         private static void AddOctant(Model3DGroup group, int x_sign, int y_sign, int z_sign,
@@ -71,11 +71,11 @@ namespace TrackBallGUI {
 
             for (int t = 0; t <= theta_steps; t++) {
                 double theta = Lerp(theta_start, theta_end, t / (double)theta_steps);
-                (double sin_theta, double cos_theta) = double.SinCos(theta);
+                (double sin_theta, double cos_theta) = double.SinCosPi(theta);
 
                 for (int p = 0; p <= phi_steps; p++) {
                     double phi = Lerp(phi_start, phi_end, p / (double)phi_steps);
-                    (double sin_phi, double cos_phi) = double.SinCos(phi);
+                    (double sin_phi, double cos_phi) = double.SinCosPi(phi);
 
                     double x = sin_theta * cos_phi;
                     double y = cos_theta;
