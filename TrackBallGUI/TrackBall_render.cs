@@ -16,7 +16,7 @@ namespace TrackBallGUI {
             Model3DGroup model_root = new();
             model_root.Children.Add(new AmbientLight(Colors.White));
 
-            Model3DGroup group = BuildOctantSphere();
+            Model3DGroup group = BuildSphere();
             group.Transform = new RotateTransform3D(axis_rotation);
             model_root.Children.Add(group);
 
@@ -31,7 +31,7 @@ namespace TrackBallGUI {
             ApplyRotation();
         }
 
-        private static Model3DGroup BuildOctantSphere() {
+        private static Model3DGroup BuildSphere() {
             Model3DGroup group = new();
 
             AddOctant(group, +1, +1, +1, 0.0, 0.5, 0.0, 0.5);
