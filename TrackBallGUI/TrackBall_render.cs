@@ -12,6 +12,9 @@ namespace TrackBallGUI {
         private const int theta_steps = 18;
         private const int phi_steps = 18;
 
+        private static readonly Color sphere_white = Color.FromRgb(250, 250, 250);
+        private static readonly Color sphere_black = Color.FromRgb(80, 80, 80);
+
         private void InitializeScene() {
             Model3DGroup model_root = new();
             model_root.Children.Add(new AmbientLight(Colors.White));
@@ -53,7 +56,7 @@ namespace TrackBallGUI {
             MeshGeometry3D geometry = BuildPatch(theta_start, theta_end, phi_start, phi_end);
             bool white = (x_sign * y_sign * z_sign) > 0;
 
-            Color fillColor = white ? Color.FromRgb(250, 250, 250) : Color.FromRgb(80, 80, 80);
+            Color fillColor = white ? sphere_white : sphere_black;
             MaterialGroup material = new();
             material.Children.Add(new DiffuseMaterial(new SolidColorBrush(fillColor)));
             material.Children.Add(new SpecularMaterial(new SolidColorBrush(Colors.White), 20));
