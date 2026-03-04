@@ -94,6 +94,12 @@ namespace TrackBallGUI {
 
         public static Quaternion operator /(Quaternion a, Quaternion b) => a * b.Inverse();
 
+        public static explicit operator global::System.Numerics.Quaternion(Quaternion value) =>
+            new((float)value.X, (float)value.Y, (float)value.Z, (float)value.W);
+
+        public static implicit operator Quaternion(global::System.Numerics.Quaternion value) =>
+            new(value.W, value.X, value.Y, value.Z);
+
         public static bool operator ==(Quaternion a, Quaternion b) {
             return a.W == b.W && a.X == b.X && a.Y == b.Y && a.Z == b.Z;
         }

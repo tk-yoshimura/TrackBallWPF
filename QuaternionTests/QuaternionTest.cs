@@ -144,6 +144,27 @@ namespace QuaternionTests {
             Assert.IsFalse(a.Equals(c));
         }
 
+        [TestMethod]
+        public void CastToSystemNumericsQuaternionTest() {
+            Quaternion q = new(1.5, 2.5, 3.5, 4.5);
+
+            global::System.Numerics.Quaternion result = (global::System.Numerics.Quaternion)q;
+
+            Assert.AreEqual(2.5f, result.X, 1e-6f);
+            Assert.AreEqual(3.5f, result.Y, 1e-6f);
+            Assert.AreEqual(4.5f, result.Z, 1e-6f);
+            Assert.AreEqual(1.5f, result.W, 1e-6f);
+        }
+
+        [TestMethod]
+        public void CastFromSystemNumericsQuaternionTest() {
+            global::System.Numerics.Quaternion q = new(2.5f, 3.5f, 4.5f, 1.5f);
+
+            Quaternion result = q;
+
+            AssertQuaternion(1.5, 2.5, 3.5, 4.5, result);
+        }
+
         private static void AssertQuaternion(double expectedW, double expectedX, double expectedY, double expectedZ, Quaternion actual) {
             Assert.AreEqual(expectedW, actual.W, tolerance);
             Assert.AreEqual(expectedX, actual.X, tolerance);
