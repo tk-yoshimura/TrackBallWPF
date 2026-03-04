@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Windows;
 
 [assembly: ThemeInfo(
@@ -8,3 +9,14 @@ using System.Windows;
                                                 //(used if a resource is not found in the page,
                                                 // app, or any theme specific resource dictionaries)
 )]
+
+[assembly: AssemblyTitle("TrackBall")]
+[assembly: AssemblyDescription("TrackBall of WPF UserControl")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("T.Yoshimura")]
+[assembly: AssemblyProduct("TrackBall")]
+[assembly: AssemblyCopyright("Copyright © T.Yoshimura 2026")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+
+[assembly: AssemblyVersion("1.0.0.*")]

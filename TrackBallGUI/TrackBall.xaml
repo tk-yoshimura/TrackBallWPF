@@ -26,10 +26,12 @@
                         <GeometryDrawing.Brush>
                             <RadialGradientBrush Center="0.5,0.5" GradientOrigin="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
                                 <GradientStop Offset="0.00" Color="#00FFFFFF" />
-                                <GradientStop Offset="0.20" Color="#03000000" />
-                                <GradientStop Offset="0.40" Color="#0C000000" />
-                                <GradientStop Offset="0.60" Color="#1D000000" />
-                                <GradientStop Offset="0.80" Color="#48000000" />
+                                <GradientStop Offset="0.20" Color="#06000000" />
+                                <GradientStop Offset="0.40" Color="#18000000" />
+                                <GradientStop Offset="0.60" Color="#34000000" />
+                                <GradientStop Offset="0.80" Color="#58000000" />
+                                <GradientStop Offset="0.90" Color="#68000000" />
+                                <GradientStop Offset="0.95" Color="#75000000" />
                                 <GradientStop Offset="1.00" Color="#7F000000" />
                             </RadialGradientBrush>
                         </GeometryDrawing.Brush>
