@@ -9,6 +9,7 @@ namespace TrackBallGUITest {
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
+        // Note: NOT USE `System.Numerics.Quaternion`
         private Quaternion selected_rotation = Quaternion.Identity;
         public Quaternion Rotation {
             get => selected_rotation;
