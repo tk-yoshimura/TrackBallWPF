@@ -12,7 +12,7 @@ namespace TrackBallGUI {
 
         private void Viewport_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             if (is_dragging) {
-                QuaternionChangeCompleted?.Invoke(this, new QuaternionChangedEventArgs(Rotation, user_operation: true));
+                RotationChangeCompleted?.Invoke(this, new RotationChangedEventArgs(Rotation, user_operation: true));
             }
 
             is_dragging = false;
@@ -37,7 +37,7 @@ namespace TrackBallGUI {
 
             last_arc_point = current_arc_point;
 
-            QuaternionChanged?.Invoke(this, new QuaternionChangedEventArgs(Rotation, user_operation: true));
+            RotationChanged?.Invoke(this, new RotationChangedEventArgs(Rotation, user_operation: true));
         }
 
         private Vector3D ProjectToArcball(Point point) {

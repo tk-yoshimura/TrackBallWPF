@@ -2,12 +2,12 @@
 // https://github.com/tk-yoshimura
 
 namespace TrackBallGUI {
-    public sealed class QuaternionChangedEventArgs : EventArgs {
+    public sealed class RotationChangedEventArgs : EventArgs {
         public Quaternion Quaternion { get; }
 
         public bool UserOperation { private set; get; }
 
-        public QuaternionChangedEventArgs(Quaternion quaternion, bool user_operation) {
+        public RotationChangedEventArgs(Quaternion quaternion, bool user_operation) {
             Quaternion = quaternion;
             UserOperation = user_operation;
         }

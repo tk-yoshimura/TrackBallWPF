@@ -27,7 +27,7 @@ xmlns:trackball="clr-namespace:TrackBallGUI;assembly=TrackBallGUI"
 ```
 
 ```csharp
-private void TrackBallControl_QuaternionChanged(object? sender, QuaternionChangedEventArgs e) {
+private void TrackBallControl_RotationChanged(object? sender, RotationChangedEventArgs e) {
     AppendLog($"dragging: {FormatQuaternion(e.Quaternion)}");
 }
 ```

@@ -19,8 +19,8 @@ namespace TrackBallGUI {
 
         #region EventHandler
         public event PropertyChangedEventHandler? PropertyChanged;
-        public event EventHandler<QuaternionChangedEventArgs>? QuaternionChanged;
-        public event EventHandler<QuaternionChangedEventArgs>? QuaternionChangeCompleted;
+        public event EventHandler<RotationChangedEventArgs>? RotationChanged;
+        public event EventHandler<RotationChangedEventArgs>? RotationChangeCompleted;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         #endregion
@@ -62,7 +62,7 @@ namespace TrackBallGUI {
                 if (!internal_only) {
                     SetValue(RotationProperty, rotation);
 
-                    QuaternionChanged?.Invoke(this, new QuaternionChangedEventArgs(rotation, user_operation));
+                    RotationChanged?.Invoke(this, new RotationChangedEventArgs(rotation, user_operation));
                 }
             }
         }

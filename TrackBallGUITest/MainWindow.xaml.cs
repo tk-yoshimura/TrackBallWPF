@@ -10,15 +10,15 @@ namespace TrackBallGUITest {
 
         public MainWindow() {
             InitializeComponent();
-            TrackBallControl1.QuaternionChanged += TrackBallControl_QuaternionChanged;
-            TrackBallControl1.QuaternionChangeCompleted += TrackBallControl_QuaternionChangeCompleted;
+            TrackBallControl1.RotationChanged += TrackBallControl_RotationChanged;
+            TrackBallControl1.RotationChangeCompleted += TrackBallControl_RotationChangeCompleted;
         }
 
-        private void TrackBallControl_QuaternionChanged(object? sender, QuaternionChangedEventArgs e) {
+        private void TrackBallControl_RotationChanged(object? sender, RotationChangedEventArgs e) {
             AppendLog($"dragging: {FormatQuaternion(e.Quaternion)}");
         }
 
-        private void TrackBallControl_QuaternionChangeCompleted(object? sender, QuaternionChangedEventArgs e) {
+        private void TrackBallControl_RotationChangeCompleted(object? sender, RotationChangedEventArgs e) {
             AppendLog($"released: {FormatQuaternion(e.Quaternion)}");
         }
 
