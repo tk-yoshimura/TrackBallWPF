@@ -56,9 +56,9 @@ namespace TrackBallGUI {
             MeshGeometry3D geometry = BuildPatch(theta_start, theta_end, phi_start, phi_end);
             bool white = (x_sign * y_sign * z_sign) > 0;
 
-            Color fillColor = white ? sphere_white : sphere_black;
+            Color color = white ? sphere_white : sphere_black;
             MaterialGroup material = new();
-            material.Children.Add(new DiffuseMaterial(new SolidColorBrush(fillColor)));
+            material.Children.Add(new DiffuseMaterial(new SolidColorBrush(color)));
             material.Children.Add(new SpecularMaterial(new SolidColorBrush(Colors.White), 20));
 
             group.Children.Add(new GeometryModel3D {
