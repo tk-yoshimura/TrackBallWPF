@@ -1,0 +1,65 @@
+﻿<!--  Copyright (c) T.Yoshimura 2026  -->
+<!--  https://github.com/tk-yoshimura  -->
+
+<UserControl
+    x:Class="TrackBallGUI.TrackBall"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    MinWidth="50"
+    MinHeight="50"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <DrawingImage x:Key="PerspectiveOverlayImage">
+            <DrawingImage.Drawing>
+                <DrawingGroup>
+                    <GeometryDrawing>
+                        <GeometryDrawing.Geometry>
+                            <EllipseGeometry
+                                Center="128,128"
+                                RadiusX="120"
+                                RadiusY="120" />
+                        </GeometryDrawing.Geometry>
+                        <GeometryDrawing.Brush>
+                            <RadialGradientBrush Center="0.5,0.5" GradientOrigin="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
+                                <GradientStop Offset="0.00" Color="#00FFFFFF" />
+                                <GradientStop Offset="0.20" Color="#03000000" />
+                                <GradientStop Offset="0.40" Color="#0C000000" />
+                                <GradientStop Offset="0.60" Color="#1D000000" />
+                                <GradientStop Offset="0.80" Color="#48000000" />
+                                <GradientStop Offset="1.00" Color="#7F000000" />
+                            </RadialGradientBrush>
+                        </GeometryDrawing.Brush>
+                    </GeometryDrawing>
+                </DrawingGroup>
+            </DrawingImage.Drawing>
+        </DrawingImage>
+    </UserControl.Resources>
+    <Grid
+        x:Name="RootGrid"
+        Background="Transparent"
+        SizeChanged="RootGrid_SizeChanged">
+        <Border
+            x:Name="ViewportHost"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Background="Transparent"
+            ClipToBounds="True">
+            <Grid>
+                <Viewport3D
+                    x:Name="Viewport"
+                    Cursor="SizeAll"
+                    MouseLeftButtonDown="Viewport_MouseLeftButtonDown"
+                    MouseLeftButtonUp="Viewport_MouseLeftButtonUp"
+                    MouseMove="Viewport_MouseMove" />
+                <Image
+                    IsHitTestVisible="False"
+                    Source="{StaticResource PerspectiveOverlayImage}"
+                    Stretch="Fill" />
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

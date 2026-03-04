@@ -1,0 +1,46 @@
+﻿<Window
+    x:Class="TrackBallGUITest.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TrackBallGUITest"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:trackball="clr-namespace:TrackBallGUI;assembly=TrackBallGUI"
+    Title="MainWindow"
+    Width="800"
+    Height="450"
+    mc:Ignorable="d">
+    <Window.DataContext>
+        <local:MainViewModel />
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="140" />
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <trackball:TrackBall
+                x:Name="TrackBallControl1"
+                Grid.Column="0"
+                Rotation="{Binding Rotation}" />
+            <trackball:TrackBall
+                x:Name="TrackBallControl2"
+                Grid.Column="1"
+                Rotation="{Binding Rotation}" />
+        </Grid>
+        <TextBox
+            x:Name="LogTextBox"
+            Grid.Row="1"
+            Margin="8"
+            FontFamily="Consolas"
+            FontSize="12"
+            IsReadOnly="True"
+            TextWrapping="NoWrap"
+            VerticalScrollBarVisibility="Auto" />
+    </Grid>
+</Window>

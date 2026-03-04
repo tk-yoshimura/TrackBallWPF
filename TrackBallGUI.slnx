@@ -1,0 +1,9 @@
+<Solution>
+  <Project Path="QuaternionTests/QuaternionTests.csproj">
+    <BuildDependency Project="TrackBallGUI/TrackBallGUI.csproj" />
+  </Project>
+  <Project Path="TrackBallGUITest/TrackBallGUITest.csproj">
+    <BuildDependency Project="TrackBallGUI/TrackBallGUI.csproj" />
+  </Project>
+  <Project Path="TrackBallGUI/TrackBallGUI.csproj" />
+</Solution>
