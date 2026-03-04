@@ -53,7 +53,7 @@
             <Grid>
                 <Viewport3D
                     x:Name="Viewport"
-                    Cursor="SizeAll"
+                    Cursor="Cross"
                     MouseLeftButtonDown="Viewport_MouseLeftButtonDown"
                     MouseLeftButtonUp="Viewport_MouseLeftButtonUp"
                     MouseMove="Viewport_MouseMove" />
