@@ -137,10 +137,8 @@ namespace TrackBallGUI {
             }
 
             Vector3D axis = new(q.X / norm, q.Y / norm, q.Z / norm);
-            double angleRadians = 2.0 * double.Atan2(norm, q.W);
-
             rotation_rotation.Axis = axis;
-            rotation_rotation.Angle = angleRadians * (180.0 / double.Pi);
+            rotation_rotation.Angle = double.Atan2Pi(norm, q.W) * 360.0;
         }
     }
 }
