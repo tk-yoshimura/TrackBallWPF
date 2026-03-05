@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:TrackBallGUITest"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:trackball="clr-namespace:TrackBallGUI;assembly=TrackBallGUI"
-    Title="MainWindow"
+    Title="TrackBallGUI Demo"
     Width="800"
     Height="450"
     mc:Ignorable="d">

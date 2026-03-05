@@ -9,8 +9,7 @@ namespace TrackBallGUI {
     public partial class TrackBall {
         private readonly AxisAngleRotation3D axis_rotation = new(new Vector3D(0, 1, 0), 0);
 
-        private const int theta_steps = 18;
-        private const int phi_steps = 18;
+        private const int sphere_divisions = 16;
 
         private static readonly Color sphere_white = Color.FromRgb(250, 250, 250);
         private static readonly Color sphere_black = Color.FromRgb(80, 80, 80);
@@ -37,23 +36,21 @@ namespace TrackBallGUI {
         private static Model3DGroup BuildSphere() {
             Model3DGroup group = new();
 
-            AddOctant(group, +1, +1, +1, 0.0, 0.5, 0.0, 0.5);
-            AddOctant(group, -1, +1, +1, 0.0, 0.5, 0.5, 1.0);
-            AddOctant(group, -1, +1, -1, 0.0, 0.5, 1.0, 1.5);
-            AddOctant(group, +1, +1, -1, 0.0, 0.5, 1.5, 2.0);
+            AddOctant(group, +1, +1, +1);
+            AddOctant(group, -1, +1, +1);
+            AddOctant(group, -1, +1, -1);
+            AddOctant(group, +1, +1, -1);
 
-            AddOctant(group, +1, -1, +1, 0.5, 1.0, 0.0, 0.5);
-            AddOctant(group, -1, -1, +1, 0.5, 1.0, 0.5, 1.0);
-            AddOctant(group, -1, -1, -1, 0.5, 1.0, 1.0, 1.5);
-            AddOctant(group, +1, -1, -1, 0.5, 1.0, 1.5, 2.0);
+            AddOctant(group, +1, -1, +1);
+            AddOctant(group, -1, -1, +1);
+            AddOctant(group, -1, -1, -1);
+            AddOctant(group, +1, -1, -1);
 
             return group;
         }
 
-        private static void AddOctant(Model3DGroup group, int x_sign, int y_sign, int z_sign,
-            double theta_start, double theta_end, double phi_start, double phi_end) {
-
-            MeshGeometry3D geometry = BuildPatch(theta_start, theta_end, phi_start, phi_end);
+        private static void AddOctant(Model3DGroup group, int x_sign, int y_sign, int z_sign) {
+            MeshGeometry3D geometry = BuildOctantMesh(sphere_divisions, x_sign, y_sign, z_sign);
             bool white = (x_sign * y_sign * z_sign) > 0;
 
             Color color = white ? sphere_white : sphere_black;
@@ -68,21 +65,24 @@ namespace TrackBallGUI {
             });
         }
 
-        private static MeshGeometry3D BuildPatch(double theta_start, double theta_end, double phi_start, double phi_end) {
+        private static MeshGeometry3D BuildOctantMesh(int divisions, int x_sign, int y_sign, int z_sign) {
             MeshGeometry3D mesh = new();
-            int columns = phi_steps + 1;
+            Dictionary<(int i, int j, int k), int> index_map = new();
+            bool flip_winding = (x_sign * y_sign * z_sign) < 0;
 
-            for (int t = 0; t <= theta_steps; t++) {
-                double theta = Lerp(theta_start, theta_end, t / (double)theta_steps);
-                (double sin_theta, double cos_theta) = double.SinCosPi(theta);
+            for (int i = 0; i <= divisions; i++) {
+                for (int j = 0; j <= divisions - i; j++) {
+                    int k = divisions - i - j;
+                    int ring = i + j;
 
-                for (int p = 0; p <= phi_steps; p++) {
-                    double phi = Lerp(phi_start, phi_end, p / (double)phi_steps);
+                    double theta = 0.5 * (ring / (double)divisions);
+                    double phi = ring > 0 ? 0.5 * (j / (double)ring) : 0.0;
+                    (double sin_theta, double cos_theta) = double.SinCosPi(theta);
                     (double sin_phi, double cos_phi) = double.SinCosPi(phi);
 
-                    double x = sin_theta * cos_phi;
-                    double y = cos_theta;
-                    double z = sin_theta * sin_phi;
+                    double x = x_sign * sin_theta * cos_phi;
+                    double y = y_sign * cos_theta;
+                    double z = z_sign * sin_theta * sin_phi;
 
                     Point3D position = new(x, y, z);
                     mesh.Positions.Add(position);
@@ -90,30 +90,42 @@ namespace TrackBallGUI {
                     Vector3D normal = new(x, y, z);
                     normal.Normalize();
                     mesh.Normals.Add(normal);
+
+                    index_map[(i, j, k)] = mesh.Positions.Count - 1;
                 }
             }
 
-            for (int t = 0; t < theta_steps; t++) {
-                for (int p = 0; p < phi_steps; p++) {
-                    int i0 = (t * columns) + p;
-                    int i1 = i0 + 1;
-                    int i2 = i0 + columns;
-                    int i3 = i2 + 1;
+            for (int i = 0; i < divisions; i++) {
+                for (int j = 0; j < divisions - i; j++) {
+                    int k = divisions - i - j;
 
-                    mesh.TriangleIndices.Add(i0);
-                    mesh.TriangleIndices.Add(i2);
-                    mesh.TriangleIndices.Add(i1);
+                    int a = index_map[(i, j, k)];
+                    int b = index_map[(i + 1, j, k - 1)];
+                    int c = index_map[(i, j + 1, k - 1)];
+                    AddTriangle(mesh, a, b, c, flip_winding);
 
-                    mesh.TriangleIndices.Add(i1);
-                    mesh.TriangleIndices.Add(i2);
-                    mesh.TriangleIndices.Add(i3);
+                    if (k >= 2) {
+                        int d = index_map[(i + 1, j + 1, k - 2)];
+                        AddTriangle(mesh, b, d, c, flip_winding);
+                    }
                 }
             }
 
             return mesh;
         }
 
-        private static double Lerp(double a, double b, double t) => a + ((b - a) * t);
+        private static void AddTriangle(MeshGeometry3D mesh, int i0, int i1, int i2, bool flip_winding) {
+            if (!flip_winding) {
+                mesh.TriangleIndices.Add(i0);
+                mesh.TriangleIndices.Add(i1);
+                mesh.TriangleIndices.Add(i2);
+            }
+            else {
+                mesh.TriangleIndices.Add(i0);
+                mesh.TriangleIndices.Add(i2);
+                mesh.TriangleIndices.Add(i1);
+            }
+        }
 
         private void RootGrid_SizeChanged(object sender, SizeChangedEventArgs e) {
             UpdateViewportSize();
