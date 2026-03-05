@@ -1,6 +1,7 @@
 ﻿// Copyright (c) T.Yoshimura 2026
 // https://github.com/tk-yoshimura
 
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
@@ -66,8 +67,10 @@ namespace TrackBallGUI {
         }
 
         private static MeshGeometry3D BuildOctantMesh(int divisions, int x_sign, int y_sign, int z_sign) {
+            Debug.Assert(divisions > 1);
+
             MeshGeometry3D mesh = new();
-            Dictionary<(int i, int j, int k), int> index_map = new();
+            Dictionary<(int i, int j, int k), int> index_map = [];
             bool flip_winding = (x_sign * y_sign * z_sign) < 0;
 
             for (int i = 0; i <= divisions; i++) {
