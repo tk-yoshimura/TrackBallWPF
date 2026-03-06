@@ -67,7 +67,7 @@ namespace TrackBallGUI {
         }
 
         private static MeshGeometry3D BuildOctantMesh(int divisions, int x_sign, int y_sign, int z_sign) {
-            Debug.Assert(divisions > 1);
+            Debug.Assert(divisions > 1 && divisions <= 256, $"Out of range: {nameof(divisions)}");
 
             MeshGeometry3D mesh = new();
             Dictionary<(int i, int j, int k), int> index_map = [];
@@ -76,21 +76,12 @@ namespace TrackBallGUI {
             for (int i = 0; i <= divisions; i++) {
                 for (int j = 0; j <= divisions - i; j++) {
                     int k = divisions - i - j;
-                    int ring = i + j;
 
-                    double theta = 0.5 * (ring / (double)divisions);
-                    double phi = ring > 0 ? 0.5 * (j / (double)ring) : 0.0;
-                    (double sin_theta, double cos_theta) = double.SinCosPi(theta);
-                    (double sin_phi, double cos_phi) = double.SinCosPi(phi);
+                    Point3D position = LatticeToOctantPoint(divisions, x_sign, y_sign, z_sign, i, j, k);
 
-                    double x = x_sign * sin_theta * cos_phi;
-                    double y = y_sign * cos_theta;
-                    double z = z_sign * sin_theta * sin_phi;
-
-                    Point3D position = new(x, y, z);
                     mesh.Positions.Add(position);
 
-                    Vector3D normal = new(x, y, z);
+                    Vector3D normal = new(position.X, position.Y, position.Z);
                     normal.Normalize();
                     mesh.Normals.Add(normal);
 
@@ -115,6 +106,22 @@ namespace TrackBallGUI {
             }
 
             return mesh;
+        }
+
+        private static Point3D LatticeToOctantPoint(int divisions, int x_sign, int y_sign, int z_sign, int i, int j, int k) {
+            int ring = i + j;
+
+            double theta = 0.5 * (ring / (double)divisions);
+            double phi = ring > 0 ? 0.5 * (j / (double)ring) : 0.0;
+
+            (double sin_theta, double cos_theta) = double.SinCosPi(theta);
+            (double sin_phi, double cos_phi) = double.SinCosPi(phi);
+
+            double x = sin_theta * cos_phi;
+            double y = cos_theta;
+            double z = sin_theta * sin_phi;
+
+            return new(x_sign * x, y_sign * y, z_sign * z);
         }
 
         private static void AddTriangle(MeshGeometry3D mesh, int i0, int i1, int i2, bool flip_winding) {
