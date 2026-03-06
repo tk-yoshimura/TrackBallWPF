@@ -109,17 +109,29 @@ namespace TrackBallGUI {
         }
 
         private static Point3D LatticeToOctantPoint(int divisions, int x_sign, int y_sign, int z_sign, int i, int j, int k) {
-            int ring = i + j;
+            double n = divisions;
 
-            double theta = 0.5 * (ring / (double)divisions);
-            double phi = ring > 0 ? 0.5 * (j / (double)ring) : 0.0;
+            (int ring_ij, int ring_jk, int ring_ki) = (i + j, j + k, k + i);
 
-            (double sin_theta, double cos_theta) = double.SinCosPi(theta);
-            (double sin_phi, double cos_phi) = double.SinCosPi(phi);
+            double theta_ij = 0.5 * (ring_ij / n);
+            double theta_jk = 0.5 * (ring_jk / n);
+            double theta_ki = 0.5 * (ring_ki / n);
 
-            double x = sin_theta * cos_phi;
-            double y = cos_theta;
-            double z = sin_theta * sin_phi;
+            double phi_ij = ring_ij > 0 ? 0.5 * (j / (double)ring_ij) : 0.0;
+            double phi_jk = ring_jk > 0 ? 0.5 * (k / (double)ring_jk) : 0.0;
+            double phi_ki = ring_ki > 0 ? 0.5 * (i / (double)ring_ki) : 0.0;
+
+            (double sin_theta_ij, double cos_theta_ij) = double.SinCosPi(theta_ij);
+            (double sin_theta_jk, double cos_theta_jk) = double.SinCosPi(theta_jk);
+            (double sin_theta_ki, double cos_theta_ki) = double.SinCosPi(theta_ki);
+
+            (double sin_phi_ij, double cos_phi_ij) = double.SinCosPi(phi_ij);
+            (double sin_phi_jk, double cos_phi_jk) = double.SinCosPi(phi_jk);
+            (double sin_phi_ki, double cos_phi_ki) = double.SinCosPi(phi_ki);
+
+            double x = (sin_theta_ij * cos_phi_ij + sin_theta_ki * sin_phi_ki + cos_theta_jk) / 3;
+            double y = (sin_theta_jk * cos_phi_jk + sin_theta_ij * sin_phi_ij + cos_theta_ki) / 3;
+            double z = (sin_theta_ki * cos_phi_ki + sin_theta_jk * sin_phi_jk + cos_theta_ij) / 3;
 
             return new(x_sign * x, y_sign * y, z_sign * z);
         }
