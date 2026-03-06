@@ -32,7 +32,9 @@
                 x:Name="TrackBallControl2"
                 Grid.Column="1"
                 Background="Aqua"
-                Rotation="{Binding Rotation}" />
+                Rotation="{Binding Rotation}"
+                SphereBlack="Coral"
+                SphereWhite="Brown" />
         </Grid>
         <TextBox
             x:Name="LogTextBox"

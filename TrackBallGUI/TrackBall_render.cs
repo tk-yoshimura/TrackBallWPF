@@ -12,8 +12,24 @@ namespace TrackBallGUI {
 
         private const int sphere_divisions = 16;
 
-        private static readonly Color sphere_white = Color.FromRgb(250, 250, 250);
-        private static readonly Color sphere_black = Color.FromRgb(80, 80, 80);
+        private Color sphere_white = Color.FromRgb(250, 250, 250);
+        private Color sphere_black = Color.FromRgb(80, 80, 80);
+
+        public Color SphereWhite {
+            set {
+                sphere_white = value;
+                InitializeScene();
+            }
+            get => sphere_white;
+        }
+
+        public Color SphereBlack {
+            set {
+                sphere_black = value;
+                InitializeScene();
+            }
+            get => sphere_black;
+        }
 
         private void InitializeScene() {
             Model3DGroup model_root = new();
@@ -34,7 +50,7 @@ namespace TrackBallGUI {
             ApplyRotation();
         }
 
-        private static Model3DGroup BuildSphere() {
+        private Model3DGroup BuildSphere() {
             Model3DGroup group = new();
 
             AddOctant(group, +1, +1, +1);
@@ -50,7 +66,7 @@ namespace TrackBallGUI {
             return group;
         }
 
-        private static void AddOctant(Model3DGroup group, int x_sign, int y_sign, int z_sign) {
+        private void AddOctant(Model3DGroup group, int x_sign, int y_sign, int z_sign) {
             MeshGeometry3D geometry = BuildOctantMesh(sphere_divisions, x_sign, y_sign, z_sign);
             bool white = (x_sign * y_sign * z_sign) > 0;
 
